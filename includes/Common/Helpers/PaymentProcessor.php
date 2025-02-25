@@ -292,7 +292,9 @@ class PaymentProcessor
     private function handleException(Exception $e): void
     {
         $this->logger->error('PaymentProcessor.php: ' . $e->getMessage());
-        WC()->session->set('iyzico_error', $e->getMessage());
+        if (WC()->session !== null) {
+            WC()->session->set('iyzico_error', $e->getMessage());
+        }
         wp_redirect(wc_get_checkout_url() . '?payment=failed');
     }
 

@@ -66,4 +66,3 @@ register_deactivation_hook(PLUGIN_BASEFILE, ['\Iyzico\IyzipayWoocommerce\Core\Pl
  * Initialize the plugin
  */
 add_action('plugins_loaded', ['\Iyzico\IyzipayWoocommerce\Core\Plugin', 'init']);
-add_action('upgrader_process_complete', ['\Iyzico\IyzipayWoocommerce\Core\Plugin', 'upgrader_process_complete'], 1, 2);
