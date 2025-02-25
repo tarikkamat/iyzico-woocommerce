@@ -6,46 +6,57 @@ use Iyzico\IyzipayWoocommerce\Common\Interfaces\LoggerInterface;
 
 abstract class AbstractLogger implements LoggerInterface
 {
-	protected const INFO_LOG = 'iyzico_info.log';
-	protected const ERROR_LOG = 'iyzico_error.log';
-	protected const WARN_LOG = 'iyzico_warn.log';
-	protected const WEBHOOK_LOG = 'iyzico_webhook.log';
-	protected $logDir;
+    protected const INFO_LOG = 'iyzico_info.log';
+    protected const ERROR_LOG = 'iyzico_error.log';
+    protected const WARN_LOG = 'iyzico_warn.log';
+    protected const WEBHOOK_LOG = 'iyzico_webhook.log';
+    protected $logDir;
 
-	public function __construct(string $logDir = '')
-	{
-		$this->logDir = $logDir ?: PLUGIN_PATH . '/log_files/';
-		$this->ensureLogDirectoryExists();
-	}
+    public function __construct(string $logDir = '')
+    {
+        $this->logDir = $logDir ?: PLUGIN_PATH . '/log_files/';
+        $this->ensureLogDirectoryExists();
+    }
 
-	protected function ensureLogDirectoryExists(): void
-	{
-		if (!file_exists($this->logDir)) {
-			mkdir($this->logDir, 0755, true);
-			$this->createHtaccess();
-		}
-	}
+    protected function ensureLogDirectoryExists(): void
+    {
+        global $wp_filesystem;
 
-	protected function createHtaccess(): void
-	{
-		$htaccessContent = "Deny from all\n";
-		file_put_contents($this->logDir . '.htaccess', $htaccessContent);
-	}
+        if (empty($wp_filesystem)) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            WP_Filesystem();
+        }
 
-	abstract public function info(string $message);
+        if (!$wp_filesystem->is_dir($this->logDir)) {
+            $wp_filesystem->mkdir($this->logDir, 0755);
+            $this->createHtaccess();
+        }
+    }
 
-	abstract public function error(string $message);
+    protected function createHtaccess(): void
+    {
+        global $wp_filesystem;
 
-	abstract public function warn(string $message);
+        $htaccessContent = "Deny from all\n";
+        $filePath = trailingslashit($this->logDir) . '.htaccess';
 
-	abstract public function webhook(string $message);
+        $wp_filesystem->put_contents($filePath, $htaccessContent, FS_CHMOD_FILE);
+    }
 
-	protected function log(string $file, string $level, string $message)
-	{
-		$timestamp = date('Y-m-d H:i:s');
-		$logMessage = "[$timestamp] [$level] $message" . PHP_EOL;
+    abstract public function info(string $message);
 
-		$filePath = $this->logDir . $file;
-		file_put_contents($filePath, $logMessage, FILE_APPEND | LOCK_EX);
-	}
+    abstract public function error(string $message);
+
+    abstract public function warn(string $message);
+
+    abstract public function webhook(string $message);
+
+    protected function log(string $file, string $level, string $message)
+    {
+        $timestamp = gmdate('Y-m-d H:i:s');
+        $logMessage = "[$timestamp] [$level] $message" . PHP_EOL;
+
+        $filePath = $this->logDir . $file;
+        file_put_contents($filePath, $logMessage, FILE_APPEND | LOCK_EX);
+    }
 }

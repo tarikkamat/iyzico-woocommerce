@@ -9,55 +9,42 @@ class CheckoutView
     private const LOADING_ID = 'loadingBar';
     private const INFO_BOX_ID = 'infoBox';
     private const CHECKOUT_FORM_ID = 'iyzipay-checkout-form';
-    
+
     private CheckoutSettings $checkoutSettings;
-    
+
     public function __construct()
     {
         $this->checkoutSettings = new CheckoutSettings();
     }
-    
-    /**
-     * @return void
-     */
+
     public function renderCheckoutForm(CheckoutFormInitialize $checkoutFormInitialize): void
     {
         if ($checkoutFormInitialize->getStatus() === 'success') {
-            // İlk önce info box'ı render et
             $this->renderInfoBox();
-            
-            // Sonra form container'ı render et
+
             $className = $this->checkoutSettings->findByKey('form_class') ?? 'popup';
+
+            $allowed_html = [
+                'div' => ['id' => [], 'class' => [], 'style' => []],
+                'script' => ['type' => [], 'src' => []],
+                'style' => [],
+                'p' => ['class' => []],
+                'strong' => [],
+            ];
+
             printf(
                 '<div id="%s" class="%s" style="display:none">%s</div>',
                 esc_attr(self::CHECKOUT_FORM_ID),
                 esc_attr($className),
-                $checkoutFormInitialize->getCheckoutFormContent()
+                wp_kses($checkoutFormInitialize->getCheckoutFormContent(), $allowed_html)
             );
             
-            // En son UI kontrolü için JavaScript'i render et
             $this->renderUiControlScript();
         } else {
             echo esc_html($checkoutFormInitialize->getErrorMessage());
         }
     }
 
-    /**
-     * @return void
-     */
-    public function renderLoadingHtml(): void
-    {
-        printf(
-            '<div id="%s">
-                <div class="loading"></div>
-                <div class="brand">
-                    <p>iyzico</p>
-                </div>
-            </div>',
-            esc_attr(self::LOADING_ID)
-        );
-    }
-    
     /**
      * @return void
      */
@@ -70,7 +57,7 @@ class CheckoutView
             esc_html($paymentValue)
         );
     }
-    
+
     /**
      * @return void
      */
@@ -78,7 +65,7 @@ class CheckoutView
     {
         ?>
         <script type="text/javascript">
-            var checkIyziInit = function() {
+            var checkIyziInit = function () {
                 if (typeof iyziInit !== 'undefined') {
                     document.getElementById('<?php echo esc_js(self::LOADING_ID); ?>').style.display = 'none';
                     document.getElementById('<?php echo esc_js(self::INFO_BOX_ID); ?>').style.display = 'block';
@@ -97,5 +84,21 @@ class CheckoutView
             }
         </script>
         <?php
+    }
+
+    /**
+     * @return void
+     */
+    public function renderLoadingHtml(): void
+    {
+        printf(
+            '<div id="%s">
+                <div class="loading"></div>
+                <div class="brand">
+                    <p>iyzico</p>
+                </div>
+            </div>',
+            esc_attr(self::LOADING_ID)
+        );
     }
 }

@@ -39,8 +39,8 @@ class Pwi extends WC_Payment_Gateway
     public function __construct()
     {
         $this->id = "pwi";
-        $this->method_title = __('Pay with iyzico', 'woocommerce-iyzico');
-        $this->method_description = __('Best Payment Solution', 'woocommerce-iyzico');
+        $this->method_title = __('Pay with iyzico', 'iyzico-woocommerce');
+        $this->method_description = __('Best Payment Solution', 'iyzico-woocommerce');
         $this->pwiSettings = new PwiSettings();
         $this->form_fields = $this->pwiSettings->getFormFields();
         $this->init_settings();
@@ -76,9 +76,9 @@ class Pwi extends WC_Payment_Gateway
             $this->order->set_payment_method('iyzico');
             $this->order->add_order_note(__(
                 "This order will be processed on the iyzico payment page.",
-                "woocommerce-iyzico"
+                "iyzico-woocommerce"
             ));
-            
+
             $pwiInitialize = $this->create_payment($order_id);
             if ($pwiInitialize->getStatus() !== 'failure') {
                 $paymentPageUrl = $pwiInitialize->getPayWithIyzicoPageUrl();
@@ -200,7 +200,38 @@ class Pwi extends WC_Payment_Gateway
         parent::admin_options();
         $parent_options = ob_get_contents();
         ob_end_clean();
-        echo $parent_options;
+
+        $allowed_html = [
+            'form' => ['method' => [], 'action' => [], 'id' => [], 'class' => [], 'enctype' => []],
+            'nav' => ['class' => []],
+            'a' => ['href' => [], 'class' => [], 'aria-label' => [], 'target' => [], 'rel' => []],
+            'h1' => ['class' => []],
+            'h2' => ['class' => []],
+            'h3' => ['class' => [], 'id' => []],
+            'table' => ['class' => []],
+            'tbody' => [],
+            'tr' => ['valign' => []],
+            'th' => ['scope' => [], 'class' => []],
+            'td' => ['class' => []],
+            'fieldset' => [],
+            'legend' => ['class' => []],
+            'label' => ['for' => [], 'class' => []],
+            'input' => ['type' => [], 'name' => [], 'value' => [], 'class' => [], 'id' => [], 'placeholder' => [], 'style' => [], 'checked' => [], 'maxlength' => []],
+            'select' => ['name' => [], 'class' => [], 'id' => [], 'style' => []],
+            'option' => ['value' => [], 'selected' => []],
+            'p' => ['class' => [], 'style' => []],
+            'strong' => [],
+            'span' => ['class' => [], 'aria-label' => [], 'tabindex' => []],
+            'button' => ['name' => [], 'class' => [], 'type' => [], 'value' => [], 'disabled' => []],
+            'input' => ['type' => [], 'name' => [], 'value' => [], 'id' => [], 'class' => [], 'style' => [], 'checked' => [], 'maxlength' => []],
+            'div' => ['class' => [], 'id' => [], 'style' => []],
+            'img' => ['src' => [], 'style' => []],
+            'link' => ['rel' => [], 'href' => [], 'type' => []],
+            'script' => ['src' => [], 'type' => []],
+            'style' => [],
+        ];
+
+        echo wp_kses($parent_options, $allowed_html);
         $this->adminSettings->getHtmlContent();
     }
 }

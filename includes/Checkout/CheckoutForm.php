@@ -41,8 +41,8 @@ class CheckoutForm extends WC_Payment_Gateway
     public function __construct()
     {
         $this->id = "iyzico";
-        $this->method_title = __('iyzico Checkout', 'woocommerce-iyzico');
-        $this->method_description = __('Best Payment Solution', 'woocommerce-iyzico');
+        $this->method_title = __('iyzico Checkout', 'iyzico-woocommerce');
+        $this->method_description = __('Best Payment Solution', 'iyzico-woocommerce');
 
         $this->checkoutSettings = new CheckoutSettings();
         $this->form_fields = $this->checkoutSettings->getFormFields();
@@ -70,13 +70,15 @@ class CheckoutForm extends WC_Payment_Gateway
         $this->checkoutView = new CheckoutView();
         $this->adminSettings = new SettingsPage();
         $this->refundProcessor = new RefundProcessor();
+
+        add_action('woocommerce_before_checkout_form', array($this, 'display_errors'));
     }
 
     public function admin_overlay_script()
     {
         $overlayScriptRequest = new RetrieveProtectedOverleyScriptRequest();
         $overlayScriptRequest->setLocale($this->checkoutSettings->findByKey('form_language') || "tr");
-        $overlayScriptRequest->setConversationId(rand(100000, 999999));
+        $overlayScriptRequest->setConversationId(wp_rand(100000, 999999));
         $overlayScriptRequest->setLocale($this->checkoutSettings->findByKey('overlay_script'));
 
         $overlayScriptResponse = ProtectedOverleyScript::retrieve($overlayScriptRequest, $this->create_options());
@@ -101,6 +103,7 @@ class CheckoutForm extends WC_Payment_Gateway
 
     public function handle_api_request()
     {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (isset($_GET['wc-api']) && $_GET['wc-api'] === 'iyzipay') {
             $this->paymentProcessor->processCallback();
             exit;
@@ -121,7 +124,7 @@ class CheckoutForm extends WC_Payment_Gateway
             if ($formType === 'redirect') {
                 $this->order->add_order_note(__(
                     "This order will be processed on the iyzico payment page.",
-                    "woocommerce-iyzico"
+                    "iyzico-woocommerce"
                 ));
                 $checkoutFormInitialize = $this->create_payment($order_id);
                 $paymentPageUrl = $checkoutFormInitialize->getPaymentPageUrl();
@@ -225,7 +228,7 @@ class CheckoutForm extends WC_Payment_Gateway
         if (strlen($paymentPageUrl) === 0) {
             wc_add_notice(__(
                 "An unknown error occurred during the payment process. Please try again.",
-                "woocommerce-iyzico"
+                "iyzico-woocommerce"
             ), 'error');
             return [
                 'result' => 'failure'
@@ -246,16 +249,22 @@ class CheckoutForm extends WC_Payment_Gateway
 
     public function display_errors()
     {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (isset($_GET['payment']) && $_GET['payment'] === 'failed') {
             $error = WC()->session->get('iyzico_error');
+
             if ($error) {
-                wc_add_notice($error, 'error');
-                WC()->session->set('iyzico_error', null);
+                wc_add_notice(
+                    '<strong>' . __('Payment Error:', 'iyzico-woocommerce') . '</strong> ' . $error,
+                    'error',
+                    ['iyzico_error' => true]
+                );
+                WC()->session->__unset('iyzico_error');
             } else {
-                wc_add_notice(__(
-                    "An unknown error occurred during the payment process. Please try again.",
-                    "woocommerce-iyzico"
-                ), 'error');
+                wc_add_notice(
+                    __('An unexpected error occurred. Please try again.', 'iyzico-woocommerce'),
+                    'error'
+                );
             }
         }
     }
@@ -266,13 +275,49 @@ class CheckoutForm extends WC_Payment_Gateway
         parent::admin_options();
         $parent_options = ob_get_contents();
         ob_end_clean();
-        echo $parent_options;
+
+        $allowed_html = [
+            'form' => ['method' => [], 'action' => [], 'id' => [], 'class' => [], 'enctype' => []],
+            'nav' => ['class' => []],
+            'a' => ['href' => [], 'class' => [], 'aria-label' => [], 'target' => [], 'rel' => []],
+            'h1' => ['class' => []],
+            'h2' => ['class' => []],
+            'h3' => ['class' => [], 'id' => []],
+            'table' => ['class' => []],
+            'tbody' => [],
+            'tr' => ['valign' => []],
+            'th' => ['scope' => [], 'class' => []],
+            'td' => ['class' => []],
+            'fieldset' => [],
+            'legend' => ['class' => []],
+            'label' => ['for' => [], 'class' => []],
+            'input' => ['type' => [], 'name' => [], 'value' => [], 'class' => [], 'id' => [], 'placeholder' => [], 'style' => [], 'checked' => [], 'maxlength' => []],
+            'select' => ['name' => [], 'class' => [], 'id' => [], 'style' => []],
+            'option' => ['value' => [], 'selected' => []],
+            'p' => ['class' => [], 'style' => []],
+            'strong' => [],
+            'span' => ['class' => [], 'aria-label' => [], 'tabindex' => []],
+            'button' => ['name' => [], 'class' => [], 'type' => [], 'value' => [], 'disabled' => []],
+            'input' => ['type' => [], 'name' => [], 'value' => [], 'id' => [], 'class' => [], 'style' => [], 'checked' => [], 'maxlength' => []],
+            'div' => ['class' => [], 'id' => [], 'style' => []],
+            'img' => ['src' => [], 'style' => []],
+            'link' => ['rel' => [], 'href' => [], 'type' => []],
+            'script' => ['src' => [], 'type' => []],
+            'style' => [],
+        ];
+
+        echo wp_kses($parent_options, $allowed_html);
         $this->adminSettings->getHtmlContent();
     }
 
     public function load_form()
     {
-        wp_enqueue_style('iyzico-loading-style', plugin_dir_url(PLUGIN_BASEFILE) . 'assets/css/iyzico-loading.css');
+        wp_enqueue_style(
+            'iyzico-loading-style',
+            plugin_dir_url(PLUGIN_BASEFILE) . 'assets/css/iyzico-loading.css',
+            array(),
+            IYZICO_PLUGIN_VERSION
+        );
         $this->checkoutView->renderLoadingHtml();
     }
 }
