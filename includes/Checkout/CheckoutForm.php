@@ -159,6 +159,7 @@ class CheckoutForm extends WC_Payment_Gateway
         $paidPrice = $this->priceHelper->priceParser(round($order->get_total(), 2));
         $callbackUrl = add_query_arg('wc-api', 'iyzipay', $order->get_checkout_order_received_url());
         $conversationId = uniqid(strval($orderId));
+        $enabledInstallments = $this->checkoutDataFactory->calculateInstallment($cart);
 
         // WooCommerce Session Settings
         $woocommerce->session->set('conversationId', $conversationId);
@@ -196,6 +197,7 @@ class CheckoutForm extends WC_Payment_Gateway
         $request->setBillingAddress($checkoutData['billingAddress']);
         isset($checkoutData['shippingAddress']) ? $request->setShippingAddress($checkoutData['shippingAddress']) : null;
         $request->setBasketItems($checkoutData['basketItems']);
+        $request->setEnabledInstallments($enabledInstallments);
 
         // Create Options
         $options = $this->create_options();

@@ -237,4 +237,52 @@ class DataFactory
 
         return $this->priceHelper->priceParser(round($price, 2));
     }
+
+    public function calculateInstallment(array $cart): array
+    {
+        $settings = get_option('woocommerce_iyzico_settings', []);
+        $categoryInstallmentMapping = !empty($settings['category_installment_mapping']) 
+            ? json_decode($settings['category_installment_mapping'], true) 
+            : [];
+
+        if (empty($categoryInstallmentMapping) || empty($cart)) {
+            return [];
+        }
+
+        $availableInstallments = null;
+
+        foreach ($cart as $item) {
+            $product = $item['data'];
+            if (!$product) continue;
+
+            $product_id = $product->is_type('variation') ? $product->get_parent_id() : $product->get_id();
+            $categories = get_the_terms($product_id, 'product_cat');
+            
+            if (!$categories || is_wp_error($categories)) continue;
+
+            foreach ($categories as $category) {
+                if (!isset($categoryInstallmentMapping[$category->term_id])) {
+                    continue;
+                }
+
+                $categoryInstallments = array_map('intval', $categoryInstallmentMapping[$category->term_id]);
+                sort($categoryInstallments);
+
+                if ($availableInstallments === null) {
+                    $availableInstallments = $categoryInstallments;
+                } else {
+                    $availableInstallments = array_intersect($availableInstallments, $categoryInstallments);
+                }
+            }
+        }
+
+        if (empty($availableInstallments)) {
+            return [];
+        }
+
+        $result = array_values($availableInstallments);
+        sort($result);
+        
+        return $result;
+    }
 }
