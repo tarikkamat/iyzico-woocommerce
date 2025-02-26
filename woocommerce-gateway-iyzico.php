@@ -66,3 +66,21 @@ register_deactivation_hook(PLUGIN_BASEFILE, ['\Iyzico\IyzipayWoocommerce\Core\Pl
  * Initialize the plugin
  */
 add_action('plugins_loaded', ['\Iyzico\IyzipayWoocommerce\Core\Plugin', 'init']);
+
+add_action('admin_enqueue_scripts', function($hook) {
+    if ('woocommerce_page_wc-settings' !== $hook) {
+        return;
+    }
+
+    if (!isset($_GET['section']) || $_GET['section'] !== 'iyzico') {
+        return;
+    }
+    
+    wp_enqueue_script(
+        'iyzico-category-installments',
+        plugins_url('assets/js/category-installments.js', __FILE__),
+        ['jquery'],
+        time(),
+        true
+    );
+});
