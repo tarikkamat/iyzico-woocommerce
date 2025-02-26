@@ -173,3 +173,27 @@ msgstr "Payment Form Language"
 
 msgid "This payment was confirmed via webhook."
 msgstr "This payment was confirmed via webhook."
+
+msgid "You can customize the applicable installment options for each category. Important Note: On the payment page, if there are products from multiple different categories in the cart, the installment options will be determined based on the category offering the fewest installment options. Similarly, if a product belongs to more than one category, the installment options will be applied based on the category with the lowest number of installments."
+msgstr "You can customize the applicable installment options for each category. Important Note: On the payment page, if there are products from multiple different categories in the cart, the installment options will be determined based on the category offering the fewest installment options. Similarly, if a product belongs to more than one category, the installment options will be applied based on the category with the lowest number of installments."
+
+msgid "Category-Based Installment Settings"
+msgstr "Category-Based Installment Settings"
+
+msgid "Select Category"
+msgstr "Select Category"
+
+msgid "Installment Options"
+msgstr "Installment Options"
+
+msgid "Please mark the applicable installment options for the selected category."
+msgstr "Please mark the applicable installment options for the selected category."
+
+msgid "%d Installment"
+msgstr "%d Installment"
+
+msgid "Installment settings for all categories have been reset successfully."
+msgstr "Installment settings for all categories have been reset successfully."
+
+msgid "Reset All Category Installment Settings"
+msgstr "Reset All Category Installment Settings"

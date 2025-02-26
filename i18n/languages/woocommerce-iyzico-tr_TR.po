@@ -173,3 +173,27 @@ msgstr "Ödeme Formu Dili"
 
 msgid "This payment was confirmed via webhook."
 msgstr "Bu ödeme webhook ile doğrulandı."
+
+msgid "You can customize the applicable installment options for each category. Important Note: On the payment page, if there are products from multiple different categories in the cart, the installment options will be determined based on the category offering the fewest installment options. Similarly, if a product belongs to more than one category, the installment options will be applied based on the category with the lowest number of installments."
+msgstr "Her bir kategori için geçerli taksit seçeneklerini özelleştirebilirsiniz. Önemli Not: Ödeme sayfasında, sepette birden fazla farklı kategoride ürün bulunması durumunda, taksit seçenekleri en az taksit imkânı sunan kategoriye göre belirlenecektir. Benzer şekilde, bir ürün birden fazla kategoriye aitse, taksit seçenekleri en düşük taksit sayısına sahip kategori baz alınarak uygulanacaktır."
+
+msgid "Category-Based Installment Settings"
+msgstr "Kategori Bazlı Taksit Ayarları"
+
+msgid "Select Category"
+msgstr "Kategori Seçin"
+
+msgid "Installment Options"
+msgstr "Taksit Seçenekleri"
+
+msgid "Please mark the applicable installment options for the selected category."
+msgstr "Seçili kategori için geçerli taksit seçeneklerini işaretleyin."
+
+msgid "%d Installment"
+msgstr "%d Taksit"
+
+msgid "Installment settings for all categories have been reset successfully."
+msgstr "Tüm kategoriler için taksit ayarları başarıyla sıfırlandı."
+
+msgid "Reset All Category Installment Settings"
+msgstr "Tüm Kategori Taksit Ayarlarını Sıfırla"
