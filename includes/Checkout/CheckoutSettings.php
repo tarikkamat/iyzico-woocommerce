@@ -154,6 +154,12 @@ class CheckoutSettings extends Config
                 'type' => 'checkbox',
                 'default' => 'no',
             ],
+            'iyzico_product_tab_enabled' => [
+                'title' => __('Installment Tab', 'iyzico-woocommerce'),
+                'label' => __('Enable Installment Tab for Product Page', 'iyzico-woocommerce'),
+                'type' => 'checkbox',
+                'default' => 'no',
+            ],
             'category_installments' => [
                 'title' => __('Category-Based Installment Settings', 'iyzico-woocommerce'),
                 'type' => 'title',

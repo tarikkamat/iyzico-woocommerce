@@ -197,3 +197,6 @@ msgstr "Installment settings for all categories have been reset successfully."
 
 msgid "Reset All Category Installment Settings"
 msgstr "Reset All Category Installment Settings"
+
+msgid "Installment"
+msgstr "Installment"

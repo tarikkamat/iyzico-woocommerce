@@ -10,7 +10,7 @@ use Iyzico\IyzipayWoocommerce\Common\Hooks\PublicHooks;
 use Iyzico\IyzipayWoocommerce\Common\Traits\PluginLoader;
 use Iyzico\IyzipayWoocommerce\Database\DatabaseManager;
 use Iyzico\IyzipayWoocommerce\Pwi\Pwi;
-use Plugin_Upgrader;
+use Iyzico\IyzipayWoocommerce\Installment\InstallmentTab;
 
 class Plugin
 {
@@ -47,6 +47,7 @@ class Plugin
         $this->initPaymentGateway();
         $this->generateWebhookKey();
         $this->checkDatabaseUpdate();
+        $this->initInstallmentTab();
 
         BlocksSupport::init();
         HighPerformanceOrderStorageSupport::init();
@@ -70,6 +71,9 @@ class Plugin
 
         require_once PLUGIN_PATH . '/includes/Pwi/Pwi.php';
         require_once PLUGIN_PATH . '/includes/Pwi/BlocksPwiMethod.php';
+
+        require_once PLUGIN_PATH . '/includes/Installment/InstallmentTab.php';
+        require_once PLUGIN_PATH . '/includes/Installment/InstallmentService.php';
     }
 
     private function setLocale()
@@ -144,5 +148,10 @@ class Plugin
             ) . '</a>';
 
         return array_merge($custom_links, $links);
+    }
+
+    private function initInstallmentTab()
+    {
+        new InstallmentTab();
     }
 }

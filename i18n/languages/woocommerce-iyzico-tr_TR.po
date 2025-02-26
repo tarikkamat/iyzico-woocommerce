@@ -197,3 +197,6 @@ msgstr "Tüm kategoriler için taksit ayarları başarıyla sıfırlandı."
 
 msgid "Reset All Category Installment Settings"
 msgstr "Tüm Kategori Taksit Ayarlarını Sıfırla"
+
+msgid "Installment"
+msgstr "Taksit Seçenekleri"
