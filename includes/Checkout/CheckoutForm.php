@@ -71,7 +71,6 @@ class CheckoutForm extends WC_Payment_Gateway
         $this->adminSettings = new SettingsPage();
         $this->refundProcessor = new RefundProcessor();
 
-        add_action('woocommerce_before_checkout_form', array($this, 'display_errors'));
     }
 
     public function admin_overlay_script()
@@ -251,22 +250,18 @@ class CheckoutForm extends WC_Payment_Gateway
 
     public function display_errors()
     {
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        global $woocommerce;
+
         if (isset($_GET['payment']) && $_GET['payment'] === 'failed') {
-            $error = WC()->session->get('iyzico_error');
+            $error = $woocommerce->session->get('iyzico_error');
+
+            if (is_null($error)) {
+                $error = isset($_GET['msg']) ? urldecode($_GET['msg']) : null;
+            }
 
             if ($error) {
-                wc_add_notice(
-                    '<strong>' . __('Payment Error:', 'iyzico-woocommerce') . '</strong> ' . $error,
-                    'error',
-                    ['iyzico_error' => true]
-                );
+                wc_add_notice($error, 'error');
                 WC()->session->__unset('iyzico_error');
-            } else {
-                wc_add_notice(
-                    __('An unexpected error occurred. Please try again.', 'iyzico-woocommerce'),
-                    'error'
-                );
             }
         }
     }

@@ -42,8 +42,8 @@ const PLUGIN_BASEFILE = __FILE__;
 define('PLUGIN_PATH', untrailingslashit(plugin_dir_path(PLUGIN_BASEFILE)));
 define('PLUGIN_URL', untrailingslashit(plugin_dir_url(PLUGIN_BASEFILE)));
 define('PLUGIN_LANG_PATH', plugin_basename(dirname(PLUGIN_BASEFILE)) . '/i18n/languages/');
-define('PLUGIN_ASSETS_DIR_URL', plugin_dir_url(__FILE__) . 'assets');
-define('PLUGIN_DIR_PATH', plugin_dir_path(__FILE__));
+define('IYZICO_PLUGIN_ASSETS_DIR_URL', plugin_dir_url(__FILE__) . 'assets');
+define('IYZICO_PLUGIN_DIR_PATH', plugin_dir_path(__FILE__));
 define('PLUGIN_DIR_URL', plugin_dir_url(__FILE__));
 define('IYZICO_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
@@ -66,21 +66,3 @@ register_deactivation_hook(PLUGIN_BASEFILE, ['\Iyzico\IyzipayWoocommerce\Core\Pl
  * Initialize the plugin
  */
 add_action('plugins_loaded', ['\Iyzico\IyzipayWoocommerce\Core\Plugin', 'init']);
-
-add_action('admin_enqueue_scripts', function($hook) {
-    if ('woocommerce_page_wc-settings' !== $hook) {
-        return;
-    }
-
-    if (!isset($_GET['section']) || $_GET['section'] !== 'iyzico') {
-        return;
-    }
-    
-    wp_enqueue_script(
-        'iyzico-category-installments',
-        plugins_url('assets/js/category-installments.js', __FILE__),
-        ['jquery'],
-        time(),
-        true
-    );
-});

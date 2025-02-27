@@ -19,7 +19,6 @@ class PublicHooks
         $this->checkoutForm = new CheckoutForm();
         $this->buyerProtection = new BuyerProtection();
         $this->webhookHelper = new WebhookHelper();
-
     }
 
     public function register()
@@ -33,5 +32,14 @@ class PublicHooks
 
         add_action('wp_footer', [$this->buyerProtection, 'iyzicoOverlayScriptMobileCss']);
         add_action('wp_enqueue_scripts', [$this->buyerProtection, 'enqueue_iyzico_overlay_script']);
+        add_action('wp_enqueue_scripts', [$this, 'installmentLoad']);
+    }
+
+    public function installmentLoad()
+    {
+        wp_register_script('iyzico-installment-composite', IYZICO_PLUGIN_ASSETS_DIR_URL . '/js/iyzico-installment-composite.js');
+        wp_register_style('iyzico-installment-settings', IYZICO_PLUGIN_ASSETS_DIR_URL . '/css/iyzico-installment-settings.css');
+        wp_register_script('iyzico-installment-vertical-with-jq', IYZICO_PLUGIN_ASSETS_DIR_URL . '/js/iyzico-installment-vertical-with-jq.js');
+        wp_register_style('iyzico-installment-vertical-with-jq', IYZICO_PLUGIN_ASSETS_DIR_URL . '/css/iyzico-installment-vertical-with-jq.css');
     }
 }

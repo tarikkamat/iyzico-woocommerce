@@ -9,6 +9,7 @@ use Iyzico\IyzipayWoocommerce\Common\Hooks\AdminHooks;
 use Iyzico\IyzipayWoocommerce\Common\Hooks\PublicHooks;
 use Iyzico\IyzipayWoocommerce\Common\Traits\PluginLoader;
 use Iyzico\IyzipayWoocommerce\Database\DatabaseManager;
+use Iyzico\IyzipayWoocommerce\Installment\InstallmentService;
 use Iyzico\IyzipayWoocommerce\Pwi\Pwi;
 use Iyzico\IyzipayWoocommerce\Installment\InstallmentTab;
 
@@ -20,6 +21,10 @@ class Plugin
     public static function activate()
     {
         DatabaseManager::createTables();
+
+        if (! wp_next_scheduled('iyzico_installment_data_scheduled')) {
+            wp_schedule_event(time(), 'hourly', 'iyzico_update_installment_data');
+        }
     }
 
     public static function deactivate()
@@ -34,6 +39,7 @@ class Plugin
         delete_option('iyzico_thank_you');
         delete_option('init_active_webhook_url');
         delete_option('iyzico_db_version');
+        wp_clear_scheduled_hook('iyzico_installment_data_scheduled');
 
         flush_rewrite_rules();
     }
@@ -48,6 +54,7 @@ class Plugin
         $this->generateWebhookKey();
         $this->checkDatabaseUpdate();
         $this->initInstallmentTab();
+        $this->initInstallmentService();
 
         BlocksSupport::init();
         HighPerformanceOrderStorageSupport::init();
@@ -138,14 +145,14 @@ class Plugin
     {
         $custom_links = [];
         $custom_links[] = '<a href="' . admin_url('admin.php?page=wc-settings&tab=checkout&section=iyzico') . '">' . __(
-                'Settings',
-                'iyzico-woocommerce'
-            ) . '</a>';
+            'Settings',
+            'iyzico-woocommerce'
+        ) . '</a>';
         $custom_links[] = '<a target="_blank" href="https://docs.iyzico.com/">' . __('Docs', 'iyzico-woocommerce') . '</a>';
         $custom_links[] = '<a target="_blank" href="https://iyzico.com/destek/iletisim">' . __(
-                'Support',
-                'iyzico-woocommerce'
-            ) . '</a>';
+            'Support',
+            'iyzico-woocommerce'
+        ) . '</a>';
 
         return array_merge($custom_links, $links);
     }
@@ -153,5 +160,10 @@ class Plugin
     private function initInstallmentTab()
     {
         new InstallmentTab();
+    }
+
+    private function initInstallmentService()
+    {
+        new InstallmentService();
     }
 }

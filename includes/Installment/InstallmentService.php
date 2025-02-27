@@ -3,7 +3,7 @@
 namespace Iyzico\IyzipayWoocommerce\Installment;
 
 use Iyzico\IyzipayWoocommerce\Checkout\CheckoutSettings;
-use Iyzipay\Model\InstallmentHtml;
+use Iyzipay\Model\InstallmentInfo;
 use Iyzipay\Options;
 use Iyzipay\Request\RetrieveInstallmentInfoRequest;
 
@@ -16,17 +16,42 @@ class InstallmentService
         $this->checkoutSettings = new CheckoutSettings();
     }
 
-    public function getInstallmentHtml(): string
+    private function getInstallmentResponse()
     {
         $options = $this->createOptions();
         $request = $this->createReq();
-        $response = InstallmentHtml::retrieve($request, $options);
+        $response = InstallmentInfo::retrieve($request, $options);
 
         if ($response->getStatus() === "success") {
-            return $response->getHtmlContent();
+            return $response;
         }
 
-        return "";
+        return null;
+    }
+
+    public function getInstallmentRates($update = false)
+    {
+        $installmentData = get_option('iyzico_installment_rates', array());
+
+        if (empty($installmentData) || $update) {
+            $response = $this->getInstallmentResponse();
+            if ($response !== null) {
+                foreach ($response->getInstallmentDetails() as $installment) {
+                    foreach ($installment->getInstallmentPrices() as $prices) {
+                        $installmentData[$installment->getCardFamilyName()][$prices->getInstallmentNumber()] = strval($prices->getTotalPrice() - 100);
+                    }
+                }
+            }
+
+            if (array_key_exists('Cardfinans', $installmentData)) {
+                $installmentData['Advantage'] = $installmentData['Cardfinans'];
+            }
+            
+            ksort($installmentData);
+            update_option('iyzico_installment_rates', $installmentData);
+        }
+
+        return $installmentData;
     }
 
     private function createOptions(): Options

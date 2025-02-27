@@ -154,7 +154,19 @@ class CheckoutSettings extends Config
                 'type' => 'checkbox',
                 'default' => 'no',
             ],
-            'iyzico_product_tab_enabled' => [
+            'product_tab_installment_settings' => [
+                'title' => __('Installment Settings', 'iyzico-woocommerce'),
+                'type' => 'select',
+                'required' => true,
+                'default' => 'no',
+                'options' => [
+                    'no' => __('Off', 'iyzico-woocommerce'),
+                    'iyzico-installment-horizontal' => __('Vertical', 'iyzico-woocommerce'),
+                    'iyzico-installment-vertical' => __('Horizontal', 'iyzico-woocommerce'),
+                    'iyzico-installment-vertical-with-jq' => __('Vertical (jQuery)', 'iyzico-woocommerce')
+                ]
+            ],
+            'iyzico_installment_settings' => [
                 'title' => __('Installment Tab', 'iyzico-woocommerce'),
                 'label' => __('Enable Installment Tab for Product Page', 'iyzico-woocommerce'),
                 'type' => 'checkbox',

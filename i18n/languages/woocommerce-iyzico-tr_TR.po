@@ -14,7 +14,6 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "X-Loco-Version: 2.6.3; wp-6.3-alpha-55617"
 
-# This file is distributed under the GNU General Public License v2 or later.
 msgid "Environment"
 msgstr "Ortam Türü"
 
