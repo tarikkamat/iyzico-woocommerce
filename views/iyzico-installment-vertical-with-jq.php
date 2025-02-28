@@ -11,4 +11,4 @@ wp_localize_script(
 );
 ?>
 <b>Bilgilendirme:</b> Yapıkredi'nin World kredi kartlarına bankanın kısıtlaması sebebiyle en fazla iki taksit yapılabilmektedir. Diğer banka World kredi kartları için aşağıdaki taksitler geçerlidir.
-<div class="iyzico-installment-container" /></div>
+<div class="iyzico-installment-container"></div>

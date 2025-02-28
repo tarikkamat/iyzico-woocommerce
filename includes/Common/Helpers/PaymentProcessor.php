@@ -163,7 +163,7 @@ class PaymentProcessor
             return;
         }
 
-        $message = "Payment ID: " . $checkoutFormResult->getPaymentId();
+        $message = "Payment ID: " . $checkoutFormResult->getPaymentId() . " Conversation ID: " . $checkoutFormResult->getConversationId();
         $order->add_order_note($message, 0, true);
 
         if ($this->checkoutSettings->findByKey('api_type') === "https://sandbox-api.iyzipay.com") {

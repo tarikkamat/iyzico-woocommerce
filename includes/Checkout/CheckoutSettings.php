@@ -26,6 +26,9 @@ class CheckoutSettings extends Config
 
         $installment_fields = [];
         for ($i = 1; $i <= 12; $i++) {
+            if($i === 4 || $i === 5 || $i === 7 || $i === 8){
+                continue;
+            }
             $installment_fields["installment_$i"] = [
                 'title' => sprintf(__('%d Installment', 'iyzico-woocommerce'), $i),
                 'type' => 'checkbox',
@@ -165,12 +168,6 @@ class CheckoutSettings extends Config
                     'iyzico-installment-vertical' => __('Horizontal', 'iyzico-woocommerce'),
                     'iyzico-installment-vertical-with-jq' => __('Vertical (jQuery)', 'iyzico-woocommerce')
                 ]
-            ],
-            'iyzico_installment_settings' => [
-                'title' => __('Installment Tab', 'iyzico-woocommerce'),
-                'label' => __('Enable Installment Tab for Product Page', 'iyzico-woocommerce'),
-                'type' => 'checkbox',
-                'default' => 'no',
             ],
             'category_installments' => [
                 'title' => __('Category-Based Installment Settings', 'iyzico-woocommerce'),
