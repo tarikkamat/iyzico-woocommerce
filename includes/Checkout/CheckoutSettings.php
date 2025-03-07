@@ -26,7 +26,7 @@ class CheckoutSettings extends Config
 
         $installment_fields = [];
         for ($i = 1; $i <= 12; $i++) {
-            if($i === 4 || $i === 5 || $i === 7 || $i === 8){
+            if($i === 4 || $i === 5 || $i === 7 || $i === 8 || $i === 10 || $i === 11) {
                 continue;
             }
             $installment_fields["installment_$i"] = [
@@ -204,6 +204,17 @@ class CheckoutSettings extends Config
 
     public function getFormFields()
     {
+        if (isset($this->form_fields['category_installment_mapping'])) {
+            $this->form_fields['category_installment_mapping']['default'] = json_encode($this->getCategoryInstallmentMapping());
+        }
         return $this->form_fields;
+    }
+
+    private function getCategoryInstallmentMapping()
+    {
+        return [
+            'category_id_1' => ['installment_1', 'installment_2'],
+            'category_id_2' => ['installment_3', 'installment_4'],
+        ];
     }
 }

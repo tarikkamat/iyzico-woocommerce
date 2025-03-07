@@ -29,12 +29,15 @@ jQuery(document).ready(function($) {
 
     categorySelect.on('change', function() {
         var selectedCategory = $(this).val();
-
+        
+        // Tüm checkbox'ları önce temizleyelim
         installmentCheckboxes.prop('checked', false);
 
+        // Seçili kategori ve mapping kontrolü
         if (selectedCategory && categoryInstallmentMapping[selectedCategory]) {
             categoryInstallmentMapping[selectedCategory].forEach(function(installment) {
-                $('#' + checkboxPrefix + installment).prop('checked', true);
+                var checkboxId = checkboxPrefix + installment;
+                $('#' + checkboxId).prop('checked', true);
             });
         }
     });
@@ -62,7 +65,10 @@ jQuery(document).ready(function($) {
         mappingInput.val(JSON.stringify(categoryInstallmentMapping));
     });
 
-    if (categorySelect.val()) {
-        categorySelect.trigger('change');
-    }
+    // Sayfa yüklendiğinde varsayılan kategori seçimini tetikleyelim
+    $(document).ready(function() {
+        if (categorySelect.val()) {
+            categorySelect.trigger('change');
+        }
+    });
 }); 
