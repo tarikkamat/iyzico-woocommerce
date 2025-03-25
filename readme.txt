@@ -1,4 +1,4 @@
-=== iyzico WooCommerce ===
+=== iyzico for WooCommerce ===
 Contributors: iyzico,mehmetselim,sozgat,feyzullahdemir,tarikkamat
 Tags: payment, ecommerce, credit card, checkout woocommerce, iyzico
 Tested up to: 6.7.2

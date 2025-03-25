@@ -12,37 +12,6 @@ class CheckoutSettings extends Config
     public function __construct()
     {
         $webhookUrl = get_site_url() . "/wp-json/iyzico/v1/webhook/" . get_option('iyzicoWebhookUrlKey');
-        $categories = get_terms([
-            'taxonomy' => 'product_cat',
-            'hide_empty' => false,
-        ]);
-
-        $category_options = [];
-        if (!empty($categories) && !is_wp_error($categories)) {
-            foreach ($categories as $category) {
-                $category_options[$category->term_id] = $category->name;
-            }
-        }
-
-        $installment_fields = [];
-        for ($i = 1; $i <= 12; $i++) {
-            if($i === 4 || $i === 5 || $i === 7 || $i === 8 || $i === 10 || $i === 11) {
-                continue;
-            }
-            $installment_fields["installment_$i"] = [
-                'title' => sprintf(__('%d Installment', 'iyzico-woocommerce'), $i),
-                'type' => 'checkbox',
-                'label' => sprintf(__('%d Installment', 'iyzico-woocommerce'), $i),
-                'default' => 'no',
-                'custom_attributes' => [
-                    'data-installment-row' => 'true',
-                    'style' => 'margin-right: 10px;'
-                ],
-                'wrapper_attributes' => [
-                    'style' => 'display: inline-block; margin-right: 15px;'
-                ]
-            ];
-        }
 
         $this->form_fields = [
             'webhook_url' => [
@@ -156,44 +125,7 @@ class CheckoutSettings extends Config
                 'label' => __('Enable request log', 'iyzico-woocommerce') . " (wp-content/plugins/iyzico-woocommerce/logs_files)",
                 'type' => 'checkbox',
                 'default' => 'no',
-            ],
-            'product_tab_installment_settings' => [
-                'title' => __('Installment Settings', 'iyzico-woocommerce'),
-                'type' => 'select',
-                'required' => true,
-                'default' => 'no',
-                'options' => [
-                    'no' => __('Off', 'iyzico-woocommerce'),
-                    'iyzico-installment-horizontal' => __('Vertical', 'iyzico-woocommerce'),
-                    'iyzico-installment-vertical' => __('Horizontal', 'iyzico-woocommerce'),
-                    'iyzico-installment-vertical-with-jq' => __('Vertical (jQuery)', 'iyzico-woocommerce')
-                ]
-            ],
-            'category_installments' => [
-                'title' => __('Category-Based Installment Settings', 'iyzico-woocommerce'),
-                'type' => 'title',
-                'description' => __("You can customize the applicable installment options for each category. Important Note: On the payment page, if there are products from multiple different categories in the cart, the installment options will be determined based on the category offering the fewest installment options. Similarly, if a product belongs to more than one category, the installment options will be applied based on the category with the lowest number of installments.", 'iyzico-woocommerce'),
-            ],
-            'category_select' => [
-                'title' => __('Select Category', 'iyzico-woocommerce'),
-                'type' => 'select',
-                'options' => $category_options,
-                'class' => 'wc-enhanced-select',
-            ],
-            'installment_options_group' => [
-                'title' => __('Installment Options', 'iyzico-woocommerce'),
-                'type' => 'title',
-                'description' => __('Please mark the applicable installment options for the selected category.', 'iyzico-woocommerce'),
-                'wrapper_attributes' => [
-                    'style' => 'margin-bottom: 0;'
-                ]
-            ],
-        ];
-
-        $this->form_fields = array_merge($this->form_fields, $installment_fields);
-        $this->form_fields['category_installment_mapping'] = [
-            'type' => 'hidden',
-            'default' => '{}',
+            ]
         ];
 
         $this->defaultSettings = [];
@@ -204,17 +136,6 @@ class CheckoutSettings extends Config
 
     public function getFormFields()
     {
-        if (isset($this->form_fields['category_installment_mapping'])) {
-            $this->form_fields['category_installment_mapping']['default'] = json_encode($this->getCategoryInstallmentMapping());
-        }
         return $this->form_fields;
-    }
-
-    private function getCategoryInstallmentMapping()
-    {
-        return [
-            'category_id_1' => ['installment_1', 'installment_2'],
-            'category_id_2' => ['installment_3', 'installment_4'],
-        ];
     }
 }

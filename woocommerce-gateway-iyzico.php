@@ -3,13 +3,13 @@
 /**
  * iyzipay WooCommerce
  *
- * @package iyzico WooCommerce
+ * @package iyzico for WooCommerce
  * @author iyzico
  * @copyright 2024 iyzico
  * @license LGPL-3.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name: iyzico WooCommerce
+ * Plugin Name: iyzico for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/iyzico-woocommerce
  * Description: iyzico Payment Gateway for WooCommerce.
  * Version: 3.5.19
@@ -64,5 +64,12 @@ register_deactivation_hook(PLUGIN_BASEFILE, ['\Iyzico\IyzipayWoocommerce\Core\Pl
 
 /**
  * Initialize the plugin
+ * 
+ * We first load textdomain at plugin_loaded with priority 0 
+ * Then initialize the plugin with init hook to make sure translations are loaded before any strings are used
  */
-add_action('plugins_loaded', ['\Iyzico\IyzipayWoocommerce\Core\Plugin', 'init']);
+add_action('plugins_loaded', function(){
+    load_plugin_textdomain('iyzico-woocommerce', false, PLUGIN_LANG_PATH);
+}, 0);
+
+add_action('init', ['\Iyzico\IyzipayWoocommerce\Core\Plugin', 'init'], 0);

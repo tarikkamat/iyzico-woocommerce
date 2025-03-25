@@ -9,9 +9,7 @@ use Iyzico\IyzipayWoocommerce\Common\Hooks\AdminHooks;
 use Iyzico\IyzipayWoocommerce\Common\Hooks\PublicHooks;
 use Iyzico\IyzipayWoocommerce\Common\Traits\PluginLoader;
 use Iyzico\IyzipayWoocommerce\Database\DatabaseManager;
-use Iyzico\IyzipayWoocommerce\Installment\InstallmentService;
 use Iyzico\IyzipayWoocommerce\Pwi\Pwi;
-use Iyzico\IyzipayWoocommerce\Installment\InstallmentTab;
 
 class Plugin
 {
@@ -21,10 +19,6 @@ class Plugin
     public static function activate()
     {
         DatabaseManager::createTables();
-
-        if (! wp_next_scheduled('iyzico_installment_data_scheduled')) {
-            wp_schedule_event(time(), 'hourly', 'iyzico_update_installment_data');
-        }
     }
 
     public static function deactivate()
@@ -39,7 +33,6 @@ class Plugin
         delete_option('iyzico_thank_you');
         delete_option('init_active_webhook_url');
         delete_option('iyzico_db_version');
-        wp_clear_scheduled_hook('iyzico_installment_data_scheduled');
 
         flush_rewrite_rules();
     }
@@ -47,14 +40,11 @@ class Plugin
     public function run()
     {
         $this->loadDependencies();
-        $this->setLocale();
         $this->defineAdminHooks();
         $this->definePublicHooks();
         $this->initPaymentGateway();
         $this->generateWebhookKey();
         $this->checkDatabaseUpdate();
-        $this->initInstallmentTab();
-        $this->initInstallmentService();
 
         BlocksSupport::init();
         HighPerformanceOrderStorageSupport::init();
@@ -78,16 +68,6 @@ class Plugin
 
         require_once PLUGIN_PATH . '/includes/Pwi/Pwi.php';
         require_once PLUGIN_PATH . '/includes/Pwi/BlocksPwiMethod.php';
-
-        require_once PLUGIN_PATH . '/includes/Installment/InstallmentTab.php';
-        require_once PLUGIN_PATH . '/includes/Installment/InstallmentService.php';
-    }
-
-    private function setLocale()
-    {
-        add_action('init', function () {
-            load_plugin_textdomain('iyzico-woocommerce', false, PLUGIN_LANG_PATH);
-        });
     }
 
     private function defineAdminHooks()
@@ -144,26 +124,16 @@ class Plugin
     public function actionLinks($links): array
     {
         $custom_links = [];
-        $custom_links[] = '<a href="' . admin_url('admin.php?page=wc-settings&tab=checkout&section=iyzico') . '">' . __(
+        $custom_links[] = '<a href="' . admin_url('admin.php?page=wc-settings&tab=checkout&section=iyzico') . '">' . esc_html__(
             'Settings',
             'iyzico-woocommerce'
         ) . '</a>';
-        $custom_links[] = '<a target="_blank" href="https://docs.iyzico.com/">' . __('Docs', 'iyzico-woocommerce') . '</a>';
-        $custom_links[] = '<a target="_blank" href="https://iyzico.com/destek/iletisim">' . __(
+        $custom_links[] = '<a target="_blank" href="https://docs.iyzico.com/">' . esc_html__('Docs', 'iyzico-woocommerce') . '</a>';
+        $custom_links[] = '<a target="_blank" href="https://iyzico.com/destek/iletisim">' . esc_html__(
             'Support',
             'iyzico-woocommerce'
         ) . '</a>';
 
         return array_merge($custom_links, $links);
-    }
-
-    private function initInstallmentTab()
-    {
-        new InstallmentTab();
-    }
-
-    private function initInstallmentService()
-    {
-        new InstallmentService();
     }
 }
