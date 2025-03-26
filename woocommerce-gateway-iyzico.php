@@ -64,4 +64,8 @@ register_deactivation_hook( PLUGIN_BASEFILE, [ '\Iyzico\IyzipayWoocommerce\Core\
 /**
  * Initialize the plugin
  */
-add_action( 'plugins_loaded', [ '\Iyzico\IyzipayWoocommerce\Core\Plugin', 'init' ] );
+add_action('plugins_loaded', function(){
+    load_plugin_textdomain('woocommerce-iyzico', false, PLUGIN_LANG_PATH);
+}, 0);
+
+add_action('init', ['\Iyzico\IyzipayWoocommerce\Core\Plugin', 'init'], 0);
