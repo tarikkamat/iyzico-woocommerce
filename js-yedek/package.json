@@ -1,5 +1,5 @@
 {
-  "name": "iyzico-woocommerce",
+  "name": "woocommerce-iyzico",
   "version": "3.5.5",
   "description": "iyzico Payment Gateway For WooCommerce",
   "main": "src/index.js",
