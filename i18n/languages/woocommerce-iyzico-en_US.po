@@ -277,3 +277,6 @@ msgstr "The BKM Express transaction was completed successfully."
 
 msgid "iyzico Bank transfer/EFT payment is pending."
 msgstr "iyzico Bank transfer/EFT payment is pending."
+
+msgid "Enable Pay with iyzico"
+msgstr "Enable Pay with iyzico"

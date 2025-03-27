@@ -289,3 +289,6 @@ msgstr "BKM Express işlemi başarıyla tamamlandı."
 
 msgid "iyzico Bank transfer/EFT payment is pending."
 msgstr "iyzico Banka transferi/EFT ödemesi bekleniyor."
+
+msgid "Enable Pay with iyzico"
+msgstr "iyzico ile öde aktifleştir"

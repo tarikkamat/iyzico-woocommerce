@@ -2,8 +2,8 @@
 LANG_DIR = i18n/languages
 
 # Spesifik .po dosyaları
-PO_FILES = $(LANG_DIR)/iyzico-woocommerce-en_US.po \
-           $(LANG_DIR)/iyzico-woocommerce-tr_TR.po
+PO_FILES = $(LANG_DIR)/woocommerce-iyzico-en_US.po \
+           $(LANG_DIR)/woocommerce-iyzico-tr_TR.po
 
 # .mo dosyaları için hedefler
 MO_FILES = $(PO_FILES:.po=.mo)
