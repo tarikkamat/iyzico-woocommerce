@@ -125,6 +125,12 @@ class CheckoutSettings extends Config
                 'label' => __('Enable request log', 'woocommerce-iyzico') . " (wp-content/plugins/woocommerce-iyzico/logs_files)",
                 'type' => 'checkbox',
                 'default' => 'no',
+            ],
+            'pwi_cargo_campaign_enabled' => [
+                'title' => __('Cargo Campaign', 'woocommerce-iyzico'),
+                'label' => __('Enable Cargo Campaign', 'woocommerce-iyzico'),
+                'type' => 'checkbox',
+                'default' => 'no',
             ]
         ];
 

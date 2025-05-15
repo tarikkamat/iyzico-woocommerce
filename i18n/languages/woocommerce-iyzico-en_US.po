@@ -280,3 +280,9 @@ msgstr "iyzico Bank transfer/EFT payment is pending."
 
 msgid "Enable Pay with iyzico"
 msgstr "Enable Pay with iyzico"
+
+msgid "Cargo Campaign"
+msgstr "Cargo Campaign"
+
+msgid "Enable Cargo Campaign"
+msgstr "Enable Cargo Campaign"
