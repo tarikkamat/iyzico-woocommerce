@@ -61,8 +61,8 @@ class BlocksPwiMethod extends AbstractPaymentMethodType
 
 	public function get_payment_method_data(): array
 	{
-		$title = __($this->settings['title'], 'woocommerce-iyzico');
-		$description = __($this->settings['description'], 'woocommerce-iyzico');
+		$title = __($this->settings['title'], 'iyzico-woocommerce');
+		$description = __($this->settings['description'], 'iyzico-woocommerce');
 		$lang = "TR";
 		$image_path = plugin_dir_url(PLUGIN_BASEFILE) . 'assets/images/pwi_tr.png';
 

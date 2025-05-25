@@ -18,7 +18,7 @@
  * Requires PHP: 7.4.33
  * Author: iyzico
  * Author URI: https://iyzico.com
- * Text Domain: woocommerce-iyzico
+ * Text Domain: iyzico-woocommerce
  * Domain Path: /i18n/languages/
  * License: LGPL v3 or later
  * License URI: http://www.gnu.org/licenses/lgpl-3.0.txt
@@ -68,7 +68,7 @@ add_action('init', 'loadTextDomain');
  */
 function loadTextDomain()
 {
-    load_plugin_textdomain('woocommerce-iyzico', false, PLUGIN_LANG_PATH);
+    load_plugin_textdomain('iyzico-woocommerce', false, PLUGIN_LANG_PATH);
 }
 
 /**
