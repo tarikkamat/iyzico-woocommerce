@@ -47,7 +47,6 @@ define('PLUGIN_LANG_PATH', plugin_basename(dirname(PLUGIN_BASEFILE)) . '/i18n/la
 define('PLUGIN_ASSETS_DIR_URL', plugin_dir_url(__FILE__) . 'assets');
 define('PLUGIN_DIR_PATH', plugin_dir_path(__FILE__));
 
-
 /**
  * Composer Autoload
  * This is used to autoload the classes.
@@ -61,15 +60,6 @@ if (file_exists(PLUGIN_PATH . '/vendor/autoload.php')) {
  */
 register_activation_hook(PLUGIN_BASEFILE, ['\Iyzico\IyzipayWoocommerce\Core\Plugin', 'activate']);
 register_deactivation_hook(PLUGIN_BASEFILE, ['\Iyzico\IyzipayWoocommerce\Core\Plugin', 'deactivate']);
-add_action('init', 'loadTextDomain');
-
-/**
- * Load plugin textdomain.
- */
-function loadTextDomain()
-{
-    load_plugin_textdomain('iyzico-woocommerce', false, PLUGIN_LANG_PATH);
-}
 
 /**
  * Initialize the plugin

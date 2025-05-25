@@ -41,8 +41,8 @@ class CheckoutForm extends WC_Payment_Gateway
     public function __construct()
     {
         $this->id = "iyzico";
-        $this->method_title = __('iyzico Checkout', 'iyzico-woocommerce');
-        $this->method_description = __('Best Payment Solution', 'iyzico-woocommerce');
+        $this->method_title = 'iyzico Checkout';
+        $this->method_description = 'Best Payment Solution';
 
         $this->checkoutSettings = new CheckoutSettings();
         $this->form_fields = $this->checkoutSettings->getFormFields();
@@ -71,6 +71,22 @@ class CheckoutForm extends WC_Payment_Gateway
         $this->adminSettings = new SettingsPage();
         $this->refundProcessor = new RefundProcessor();
 
+    }
+
+    /**
+     * Get translated method title
+     * @return string
+     */
+    public function get_method_title() {
+        return __('iyzico Checkout', 'iyzico-woocommerce');
+    }
+
+    /**
+     * Get translated method description
+     * @return string
+     */
+    public function get_method_description() {
+        return __('Best Payment Solution', 'iyzico-woocommerce');
     }
 
     public function admin_overlay_script()

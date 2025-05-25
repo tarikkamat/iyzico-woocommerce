@@ -39,8 +39,8 @@ class Pwi extends WC_Payment_Gateway
     public function __construct()
     {
         $this->id = "pwi";
-        $this->method_title = __('Pay with iyzico', 'iyzico-woocommerce');
-        $this->method_description = __('Best Payment Solution', 'iyzico-woocommerce');
+        $this->method_title = 'Pay with iyzico';
+        $this->method_description = 'Best Payment Solution';
         $this->pwiSettings = new PwiSettings();
         $this->form_fields = $this->pwiSettings->getFormFields();
         $this->init_settings();
@@ -67,6 +67,22 @@ class Pwi extends WC_Payment_Gateway
 
         $this->pwiDataFactory = new DataFactory();
         $this->refundProcessor = new RefundProcessor();
+    }
+
+    /**
+     * Get translated method title
+     * @return string
+     */
+    public function get_method_title() {
+        return __('Pay with iyzico', 'iyzico-woocommerce');
+    }
+
+    /**
+     * Get translated method description
+     * @return string
+     */
+    public function get_method_description() {
+        return __('Best Payment Solution', 'iyzico-woocommerce');
     }
 
     public function process_payment($order_id)

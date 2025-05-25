@@ -24,7 +24,18 @@ abstract class AbstractLogger implements LoggerInterface
 
         if (empty($wp_filesystem)) {
             require_once ABSPATH . 'wp-admin/includes/file.php';
-            WP_Filesystem();
+            $access_type = get_filesystem_method();
+            
+            if ($access_type === 'direct') {
+                WP_Filesystem();
+            } else {
+                // Fallback to direct file operations if WP_Filesystem is not available
+                if (!file_exists($this->logDir)) {
+                    wp_mkdir_p($this->logDir);
+                    $this->createHtaccessDirect();
+                }
+                return;
+            }
         }
 
         if (!$wp_filesystem->is_dir($this->logDir)) {
@@ -41,6 +52,13 @@ abstract class AbstractLogger implements LoggerInterface
         $filePath = trailingslashit($this->logDir) . '.htaccess';
 
         $wp_filesystem->put_contents($filePath, $htaccessContent, FS_CHMOD_FILE);
+    }
+
+    protected function createHtaccessDirect(): void
+    {
+        $htaccessContent = "Deny from all\n";
+        $filePath = trailingslashit($this->logDir) . '.htaccess';
+        file_put_contents($filePath, $htaccessContent);
     }
 
     abstract public function info(string $message);

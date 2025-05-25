@@ -39,6 +39,10 @@ class Plugin
 
     public function run()
     {
+        // First load text domain
+        load_plugin_textdomain('iyzico-woocommerce', false, PLUGIN_LANG_PATH);
+
+        // Then load dependencies and register hooks
         $this->loadDependencies();
         $this->defineAdminHooks();
         $this->definePublicHooks();
@@ -124,15 +128,23 @@ class Plugin
     public function actionLinks($links): array
     {
         $custom_links = [];
-        $custom_links[] = '<a href="' . admin_url('admin.php?page=wc-settings&tab=checkout&section=iyzico') . '">' . esc_html__(
-            'Settings',
-            'iyzico-woocommerce'
-        ) . '</a>';
-        $custom_links[] = '<a target="_blank" href="https://docs.iyzico.com/">' . esc_html__('Docs', 'iyzico-woocommerce') . '</a>';
-        $custom_links[] = '<a target="_blank" href="https://iyzico.com/destek/iletisim">' . esc_html__(
-            'Support',
-            'iyzico-woocommerce'
-        ) . '</a>';
+        
+        // Check if text domain is loaded, if not return links without translations
+        if (!is_textdomain_loaded('iyzico-woocommerce')) {
+            $custom_links[] = '<a href="' . admin_url('admin.php?page=wc-settings&tab=checkout&section=iyzico') . '">Settings</a>';
+            $custom_links[] = '<a target="_blank" href="https://docs.iyzico.com/">Docs</a>';
+            $custom_links[] = '<a target="_blank" href="https://iyzico.com/destek/iletisim">Support</a>';
+        } else {
+            $custom_links[] = '<a href="' . admin_url('admin.php?page=wc-settings&tab=checkout&section=iyzico') . '">' . esc_html__(
+                'Settings',
+                'iyzico-woocommerce'
+            ) . '</a>';
+            $custom_links[] = '<a target="_blank" href="https://docs.iyzico.com/">' . esc_html__('Docs', 'iyzico-woocommerce') . '</a>';
+            $custom_links[] = '<a target="_blank" href="https://iyzico.com/destek/iletisim">' . esc_html__(
+                'Support',
+                'iyzico-woocommerce'
+            ) . '</a>';
+        }
 
         return array_merge($custom_links, $links);
     }
