@@ -183,7 +183,7 @@
 			$woocommerce->session->set('totalAmount', $order->get_total());
 
 			// Payment Source Settings
-			$paymentSource = "WOOCOMMERCE|$woocommerce->version|" . IYZICO_PLUGIN_VERSION;
+			$paymentSource = "WOOCOMMERCE|$woocommerce->version|" . "CARRERA-" .IYZICO_PLUGIN_VERSION;
 			$affiliate     = $this->checkoutSettings->findByKey('affiliate_network');
 			if (strlen($affiliate) > 0) {
 				$paymentSource = "$paymentSource|$affiliate";
