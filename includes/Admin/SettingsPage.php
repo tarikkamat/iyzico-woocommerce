@@ -1,14 +1,14 @@
 <?php
 
-namespace Iyzico\IyzipayWoocommerce\Admin;
+	namespace Iyzico\IyzipayWoocommerce\Admin;
 
-class SettingsPage
-{
-    public function getHtmlContent()
-    {
-        $logo_url = esc_url(PLUGIN_URL) . '/assets/images/iyzico_logo.png';
+	class SettingsPage
+	{
+		public function getHtmlContent()
+		{
+			$logo_url = esc_url(PLUGIN_URL) . '/assets/images/iyzico_logo.png';
 
-        $html = '<style>
+			$html = '<style>
             @media (max-width:768px){.iyziBrand{position:fixed;bottom:0;top:auto!important;right:0!important}}
             .iyziBrandLogo {
                 background-image: url("' . $logo_url . '");
@@ -28,15 +28,15 @@ class SettingsPage
         </div>
        ';
 
-        $allowed_html = [
-            'style' => [],
-            'div' => ['class' => [], 'id' => [], 'style' => []],
-            'p' => ['style' => []],
-            'strong' => [],
-            'button' => ['type' => [], 'id' => [], 'class' => []],
-            'script' => [],
-        ];
+			$allowed_html = [
+				'style' => [],
+				'div' => ['class' => [], 'id' => [], 'style' => []],
+				'p' => ['style' => []],
+				'strong' => [],
+				'button' => ['type' => [], 'id' => [], 'class' => []],
+				'script' => [],
+			];
 
-        echo wp_kses($html, $allowed_html);
-    }
-}
+			echo wp_kses($html, $allowed_html);
+		}
+	}

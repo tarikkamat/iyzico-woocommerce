@@ -1,43 +1,43 @@
 <?php
 
-namespace Iyzico\IyzipayWoocommerce\Common\Hooks;
+	namespace Iyzico\IyzipayWoocommerce\Common\Hooks;
 
-use Iyzico\IyzipayWoocommerce\Checkout\CheckoutForm;
-use Iyzico\IyzipayWoocommerce\Pwi\Pwi;
+	use Iyzico\IyzipayWoocommerce\Checkout\CheckoutForm;
+	use Iyzico\IyzipayWoocommerce\Pwi\Pwi;
 
-class AdminHooks
-{
-	private $checkoutForm = null;
-	private $pwi = null;
-
-	private function getCheckoutForm()
+	class AdminHooks
 	{
-		if ($this->checkoutForm === null) {
-			$this->checkoutForm = new CheckoutForm();
+		private $checkoutForm = null;
+		private $pwi = null;
+
+		private function getCheckoutForm()
+		{
+			if ($this->checkoutForm === null) {
+				$this->checkoutForm = new CheckoutForm();
+			}
+			return $this->checkoutForm;
 		}
-		return $this->checkoutForm;
-	}
 
-	private function getPwi()
-	{
-		if ($this->pwi === null) {
-			$this->pwi = new Pwi();
+		private function getPwi()
+		{
+			if ($this->pwi === null) {
+				$this->pwi = new Pwi();
+			}
+			return $this->pwi;
 		}
-		return $this->pwi;
+
+		public function register(): void
+		{
+			add_action('woocommerce_update_options_payment_gateways_iyzico', function () {
+				$this->getCheckoutForm()->process_admin_options();
+			});
+
+			add_action('woocommerce_update_options_payment_gateways_pwi', function () {
+				$this->getPwi()->process_admin_options();
+			});
+
+			add_action('woocommerce_update_options_payment_gateways_iyzico', function () {
+				$this->getCheckoutForm()->admin_overlay_script();
+			});
+		}
 	}
-
-	public function register(): void
-	{
-		add_action('woocommerce_update_options_payment_gateways_iyzico', function() {
-			$this->getCheckoutForm()->process_admin_options();
-		});
-
-		add_action('woocommerce_update_options_payment_gateways_pwi', function() {
-			$this->getPwi()->process_admin_options();
-		});
-
-		add_action('woocommerce_update_options_payment_gateways_iyzico', function() {
-			$this->getCheckoutForm()->admin_overlay_script();
-		});
-	}
-}
