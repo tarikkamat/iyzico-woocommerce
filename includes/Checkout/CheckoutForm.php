@@ -214,18 +214,6 @@
 			isset($checkoutData['shippingAddress']) ? $request->setShippingAddress($checkoutData['shippingAddress']) : null;
 			$request->setBasketItems($checkoutData['basketItems']);
 
-			// Cargo Price Discount Feature
-			$isEnabledCargoCampaign = $this->checkoutSettings->findByKey('pwi_cargo_campaign_enabled');
-			if ($isEnabledCargoCampaign === 'yes') {
-				foreach ($checkoutData['basketItems'] as $basketItem) {
-					if ($basketItem->getId() === 'SHIPPING') {
-						$request->setShippingAmountExcluded(true);
-						$request->setPaidPrice($this->priceHelper->priceParser(round(floatval($request->getPaidPrice()) - floatval($basketItem->getPrice()), 2)));
-					}
-				}
-			}
-
-
 			// Create Options
 			$options = $this->create_options();
 

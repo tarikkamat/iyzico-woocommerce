@@ -125,12 +125,6 @@
 					'label' => __('Enable request log', 'iyzico-woocommerce') . " (wp-content/plugins/iyzico-woocommerce/logs_files)",
 					'type' => 'checkbox',
 					'default' => 'no',
-				],
-				'pwi_cargo_campaign_enabled' => [
-					'title' => __('Cargo Campaign', 'iyzico-woocommerce'),
-					'label' => __('Enable Cargo Campaign', 'iyzico-woocommerce'),
-					'type' => 'checkbox',
-					'default' => 'no',
 				]
 			];
 
