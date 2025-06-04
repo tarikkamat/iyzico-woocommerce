@@ -34,6 +34,8 @@
 			try {
 				$iyziOrder = $this->getIyziOrder();
 
+				$this->logger->info('PaymentProcessor.php: ' . print_r($iyziOrder, true));
+
 				if (!is_array($iyziOrder)) {
 					throw new Exception(__("Order not found.", "iyzico-woocommerce"));
 				}
@@ -43,6 +45,9 @@
 				$orderId        = $iyziOrder['order_id'];
 
 				$checkoutFormResult = $this->retrieveCheckoutForm($token, $conversationId);
+
+				$this->logger->info('PaymentProcessor.php: ' . print_r($checkoutFormResult, true));
+
 				$order              = $this->getOrder($orderId);
 
 				$paymentStatus = $checkoutFormResult->getPaymentStatus();

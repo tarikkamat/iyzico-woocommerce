@@ -260,6 +260,7 @@
 
 		public function checkout_form($orderId)
 		{
+			$this->logger->info("Checkout Form Rendered for Order ID: $orderId");
 			$checkoutFormInitialize = $this->create_payment($orderId);
 			$this->checkoutView->renderCheckoutForm($checkoutFormInitialize);
 		}
@@ -270,6 +271,8 @@
 
 			if (isset($_GET['payment']) && $_GET['payment'] === 'failed') {
 				$error = $woocommerce->session->get('iyzico_error');
+
+				$this->logger->error("Payment failed with error: " . $_GET['msg']);
 
 				if (is_null($error)) {
 					$error = isset($_GET['msg']) ? urldecode($_GET['msg']) : null;
